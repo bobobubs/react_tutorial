@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 
-function ListGroup() {
-  let items = ["Claremont", "Upland", "Montclair", "Pasadena", "Los Angeles"];
+interface Props {
+  items: string[];
+  heading: string;
+}
 
+function ListGroup({ items, heading }: Props) {
   //Hook: Allows for built in features in React
   //Need because we need to put a selectedIndex variable into our react element
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -17,7 +20,7 @@ function ListGroup() {
 
   return (
     <>
-      <h1>List</h1>
+      <h1>{heading}</h1>
       {getMessage()}
       <ul className="list-group">
         {items.map((item, index) => (
