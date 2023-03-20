@@ -1,12 +1,10 @@
 /** @format */
 
-import Alert from "./components/Alert";
+import Button from "./components/button";
 function App() {
   return (
     <div>
-      <Alert>
-        <span>Hello World</span>
-      </Alert>
+      <Button text="Hello World"></Button>
     </div>
   );
 }
