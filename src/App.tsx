@@ -1,10 +1,10 @@
 /** @format */
 
-import Button from "./components/button";
+import Button from "./components/Button";
 function App() {
   return (
     <div>
-      <Button text="Hello World"></Button>
+      <Button onClick={() => console.log("CLICKED")}>Hello World</Button>
     </div>
   );
 }

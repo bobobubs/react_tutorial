@@ -1,12 +1,18 @@
-import { ReactNode } from "react";
+/** @format */
+
+import { Children, ReactNode } from "react";
 
 interface Props {
-    text: string;
+  children: string;
+  onClick: () => void;
 }
 
-const Button = ({text}: Props) => {
-    return <button type="button" className="btn btn-primary">{text}</button>
-
-}
+const Button = ({ children, onClick }: Props) => {
+  return (
+    <button className="btn btn-primary" onClick={onClick}>
+      {children}
+    </button>
+  );
+};
 
 export default Button;
