@@ -10,12 +10,11 @@ function App() {
 
   return (
     <div>
-      {alertVisible && (
-        <Alert onClose={() => setAlertVisibility(false)}>My Alert</Alert>
-      )}
-      <Button onClick={() => setAlertVisibility(true)} color="primary">
-        Hello World
-      </Button>
+      <ListGroup
+        items={["Baldurs gate", "Diablo 4", "Coding"]}
+        heading="Activities I could be doing"
+        onSelectItem={() => console.log("Something was sellected")}
+      />
     </div>
   );
 }
