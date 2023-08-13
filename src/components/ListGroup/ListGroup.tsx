@@ -1,6 +1,7 @@
 /** @format */
 
 import { useState } from "react";
+import "./";
 
 interface Props {
   items: string[];
