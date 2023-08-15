@@ -1,31 +1,31 @@
 /** @format */
 
 import { useState } from "react";
-import NavBar from "./components/NavBar";
-import Cart from "./components/Cart";
+import ExpandableText from "./components/ExpandableText";
 
 function App() {
   const [alertVisible, setAlertVisibility] = useState(false);
-  const [cart, setCart] = useState({
-    discout: 0.1,
-    items: [
-      { id: 1, title: "Product 1", quantity: 1 },
-      { id: 2, title: "Product 2", quantity: 1 },
-    ],
-  });
+  const [isMore, setIsMore] = useState(true);
 
-  const handleClick = () => {
-    setCart({
-      ...cart,
-      items: cart.items.map((item) => {
-        item.id === 1 ? { ...item, quantity: item.quantity++ } : item;
-      }),
-    });
-  };
+  const handleClick = () => {};
 
   return (
     <>
-      <div></div>
+      <div>
+        <ExpandableText>
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consequuntur
+          expedita assumenda nisi maxime. Voluptate autem sed eligendi veniam
+          nulla deleniti, recusandae excepturi similique omnis. Dicta aliquid
+          enim nihil? Accusamus ut ipsum quibusdam quasi consectetur dolorem
+          vitae tempore, ratione minus tenetur ex nostrum numquam rem ducimus
+          recusandae, suscipit quae dolor unde impedit magni, praesentium
+          perferendis. Ex quaerat quos quam. Corrupti dolore aliquam repudiandae
+          asperiores quo voluptatum vel necessitatibus alias ratione nesciunt
+          doloremque magnam iusto, saepe optio nobis vitae eum maxime recusandae
+          impedit ut illum modi ab laudantium. Saepe ipsa tempore nemo
+          blanditiis nisi eum, illum nulla animi provident, officiis ut eius?
+        </ExpandableText>
+      </div>
     </>
   );
 }
