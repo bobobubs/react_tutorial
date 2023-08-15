@@ -6,14 +6,20 @@ import Cart from "./components/Cart";
 
 function App() {
   const [alertVisible, setAlertVisibility] = useState(false);
-  const [cartItems, setCartItems] = useState(["apples", "oranges"]);
+  const [game, setGame] = useState({
+    id: 1,
+    player: {
+      name: "John",
+    },
+  });
+
+  const handleClick = () => {
+    setGame({ ...game, player: { ...game.player, name: "Bob" } });
+  };
 
   return (
     <>
-      <div>
-        <NavBar cartNumItems={cartItems.length} />
-        <Cart cartItems={cartItems} onClear={() => setCartItems([])} />
-      </div>
+      <div></div>
     </>
   );
 }
