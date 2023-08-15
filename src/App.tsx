@@ -6,15 +6,13 @@ import Cart from "./components/Cart";
 
 function App() {
   const [alertVisible, setAlertVisibility] = useState(false);
-  const [game, setGame] = useState({
-    id: 1,
-    player: {
-      name: "John",
-    },
+  const [pizza, setPizza] = useState({
+    name: "Spicy Pepperoni",
+    toppings: ["Mushroom"],
   });
 
   const handleClick = () => {
-    setGame({ ...game, player: { ...game.player, name: "Bob" } });
+    setPizza({ ...pizza, toppings: [...pizza.toppings, "Pepperoni"] });
   };
 
   return (
