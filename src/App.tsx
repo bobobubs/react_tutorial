@@ -1,17 +1,20 @@
 /** @format */
 
 import { useState } from "react";
-import Button from "./components/Button/Button";
-import Alert from "./components/Alert";
-import ListGroup from "./components/ListGroup";
-import Like from "./components/Like";
+import NavBar from "./components/NavBar";
+import Cart from "./components/Cart";
 
 function App() {
   const [alertVisible, setAlertVisibility] = useState(false);
+  const [cartItems, setCartItems] = useState(["apples", "oranges"]);
+
   return (
-    <div>
-      <Like onClick={() => console.log("Clicked!")} />
-    </div>
+    <>
+      <div>
+        <NavBar cartNumItems={cartItems.length} />
+        <Cart cartItems={cartItems} onClear={() => setCartItems([])} />
+      </div>
+    </>
   );
 }
 
