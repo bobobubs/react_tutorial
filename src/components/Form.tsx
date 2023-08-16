@@ -4,7 +4,18 @@ import React from "react";
 
 const Form = () => {
   return (
-    <form>
+    <form
+      //this is the property that is to be set to a function.
+      // can be an inline arrow function like it is done here.
+      // or it can be a reference to a function defined elsewhere.
+      // although if done like ^ then it is only a reference in the prop. NOT A Call
+      onSubmit={(event) => {
+        //preventDefault is used to prevent the submit button
+        //from actually sending anything to the server.
+        event.preventDefault();
+        console.log("Submitted");
+      }}
+    >
       <div className="mb-3">
         <label htmlFor="name" className="form-label">
           Name
