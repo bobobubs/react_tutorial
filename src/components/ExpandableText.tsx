@@ -6,7 +6,6 @@ import { useState } from "react";
 interface Props {
   children: string;
   maxChar?: number;
-  onSwap: () => void;
 }
 
 const ExpandableText = ({ children, maxChar = 100 }: Props) => {
