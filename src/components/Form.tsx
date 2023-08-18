@@ -1,33 +1,28 @@
 /** @format */
 
 import React, { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 
 const Form = () => {
-  //initialize a state variable to hold the person
-  const [person, setPerson] = useState({
-    name: "",
-    age: "",
-  });
+  // Craete a register which is a function that is from the useForm returned object
+  const { register, handleSubmit } = useForm();
+
+  // function that will be called to handle the logic when the submit button is clicked.
+  const onSubmit = (data: FieldValues) => console.log(data);
 
   return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault();
-        console.log(person);
-      }}
-    >
+    //this is probably the worst syntax that I have ever seen.
+    //the first on submit is a propert of the <form> element.
+    //handleSubmit is a function that is from the object returned from useForm
+    //the second onSubmit is the function that we defined above.
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-3">
         <label htmlFor="name" className="form-label">
           Name
         </label>
         <input
-          //update the person state variable using the onChange event.
-          //This will happen whenever someone does something like a keystroke.
-          onChange={(event) => {
-            setPerson({ ...person, name: event.target.value });
-          }}
-          //value is set discretely to make REACT the single source of truth
-          value={person.name}
+          //the register function returns a bunch of properties of something associate with name
+          {...register("name")}
           id="name"
           type="text"
           className="form-control"
@@ -38,10 +33,7 @@ const Form = () => {
           Age
         </label>
         <input
-          onChange={(event) =>
-            setPerson({ ...person, age: parseInt(event.target.value) })
-          }
-          value={person.age}
+          {...register("age")}
           id="age"
           type="number"
           className="form-control"
