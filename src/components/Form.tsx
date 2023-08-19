@@ -5,23 +5,21 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-//z.object expects an object and returns a schema with out validation rules for all of our form feels defined in it
 const schema = z.object({
-  name: z.string().min(3, { message: "Name must be at least 3 characters" }), //the message key allows your to determine what you want to error message to appear as.
+  name: z.string().min(3, { message: "Name must be at least 3 characters" }),
   age: z
-    .number({ invalid_type_error: "Age is requried to be a number" }) //this will show if someone tries to enter the wrong type
+    .number({ invalid_type_error: "Age is requried to be a number" })
     .min(18),
 });
-
-//can also use the z.infer function to define the interface for FormData
 type FormData = z.infer<typeof schema>;
 
 const Form = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>({ resolver: zodResolver(schema) }); //set the resolver for our zod object in the useForm function
+    //added isValid to the form state
+    formState: { errors, isValid },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
   const onSubmit = (data: FieldValues) => console.log(data);
 
   return (
@@ -37,26 +35,27 @@ const Form = () => {
           className="form-control"
         />
 
-        {
-          //this code uses zod to create our error messages based on the schema that was defined above.
-          errors.name && <p className="text-danger">{errors.name.message}</p>
-        }
+        {errors.name && <p className="text-danger">{errors.name.message}</p>}
       </div>
       <div className="mb-3">
         <label htmlFor="age" className="form-label">
           Age
         </label>
         <input
-          {...register("age", { valueAsNumber: true })} // valueAsNumber removes the Expected Number, recieved String error by saying that age's value is a numbner
+          {...register("age", { valueAsNumber: true })}
           id="age"
           type="number"
           className="form-control"
         />
-        {
-          //this code uses zod to create our error messages based on the schema that was defined above.
-          errors.age && <p className="text-danger">{errors.age.message}</p>
-        }
-        <button className="btn btn-primary" type="submit">
+        {errors.age && <p className="text-danger">{errors.age.message}</p>}
+
+        <button
+          className="btn btn-primary"
+          type="submit"
+          disabled={
+            !isValid /*used isValid from form state to dictate when a button is good to use */
+          }
+        >
           Submit
         </button>
       </div>
