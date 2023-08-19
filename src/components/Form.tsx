@@ -2,20 +2,26 @@
 
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-//defines an interface for the Form that we are defining
-interface FormData {
-  name: string;
-  age: number;
-}
+//z.object expects an object and returns a schema with out validation rules for all of our form feels defined in it
+const schema = z.object({
+  name: z.string().min(3, { message: "Name must be at least 3 characters" }), //the message key allows your to determine what you want to error message to appear as.
+  age: z
+    .number({ invalid_type_error: "Age is requried to be a number" }) //this will show if someone tries to enter the wrong type
+    .min(18),
+});
+
+//can also use the z.infer function to define the interface for FormData
+type FormData = z.infer<typeof schema>;
 
 const Form = () => {
   const {
     register,
     handleSubmit,
-    //nested destructuring to get the errors prop from formState
     formState: { errors },
-  } = useForm<FormData>(); //invoking the interface when we call useForm
+  } = useForm<FormData>({ resolver: zodResolver(schema) }); //set the resolver for our zod object in the useForm function
   const onSubmit = (data: FieldValues) => console.log(data);
 
   return (
@@ -25,34 +31,31 @@ const Form = () => {
           Name
         </label>
         <input
-          // can also add an object as an argument to register to allow for HTML data validation properties
-          //onSubmit will not be invoked unless validation is passed.
-          {...register("name", { required: true, minLength: 3 })}
+          {...register("name")}
           id="name"
           type="text"
           className="form-control"
         />
 
         {
-          //name? is using optional chaining. Basically if name is not there, thenwe will not continue to interpret that code.
-          errors.name?.type === "required" && (
-            <p className="text-danger">Name is required</p>
-          )
+          //this code uses zod to create our error messages based on the schema that was defined above.
+          errors.name && <p className="text-danger">{errors.name.message}</p>
         }
-        {errors.name?.type === "minLength" && (
-          <p className="text-danger">Name must be at least 3 charaters.</p>
-        )}
       </div>
       <div className="mb-3">
         <label htmlFor="age" className="form-label">
           Age
         </label>
         <input
-          {...register("age")}
+          {...register("age", { valueAsNumber: true })} // valueAsNumber removes the Expected Number, recieved String error by saying that age's value is a numbner
           id="age"
           type="number"
           className="form-control"
         />
+        {
+          //this code uses zod to create our error messages based on the schema that was defined above.
+          errors.age && <p className="text-danger">{errors.age.message}</p>
+        }
         <button className="btn btn-primary" type="submit">
           Submit
         </button>
