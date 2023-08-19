@@ -3,30 +3,45 @@
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
-const Form = () => {
-  // Craete a register which is a function that is from the useForm returned object
-  const { register, handleSubmit } = useForm();
+//defines an interface for the Form that we are defining
+interface FormData {
+  name: string;
+  age: number;
+}
 
-  // function that will be called to handle the logic when the submit button is clicked.
+const Form = () => {
+  const {
+    register,
+    handleSubmit,
+    //nested destructuring to get the errors prop from formState
+    formState: { errors },
+  } = useForm<FormData>(); //invoking the interface when we call useForm
   const onSubmit = (data: FieldValues) => console.log(data);
 
   return (
-    //this is probably the worst syntax that I have ever seen.
-    //the first on submit is a propert of the <form> element.
-    //handleSubmit is a function that is from the object returned from useForm
-    //the second onSubmit is the function that we defined above.
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-3">
         <label htmlFor="name" className="form-label">
           Name
         </label>
         <input
-          //the register function returns a bunch of properties of something associate with name
-          {...register("name")}
+          // can also add an object as an argument to register to allow for HTML data validation properties
+          //onSubmit will not be invoked unless validation is passed.
+          {...register("name", { required: true, minLength: 3 })}
           id="name"
           type="text"
           className="form-control"
         />
+
+        {
+          //name? is using optional chaining. Basically if name is not there, thenwe will not continue to interpret that code.
+          errors.name?.type === "required" && (
+            <p className="text-danger">Name is required</p>
+          )
+        }
+        {errors.name?.type === "minLength" && (
+          <p className="text-danger">Name must be at least 3 charaters.</p>
+        )}
       </div>
       <div className="mb-3">
         <label htmlFor="age" className="form-label">
