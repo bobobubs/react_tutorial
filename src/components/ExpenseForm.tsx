@@ -68,12 +68,21 @@ export const ExpenseForm = () => {
         <label htmlFor="category" className="form-label">
           Category
         </label>
-        <input
+        <select
           {...register("category")}
           id="category"
-          type="text"
           className="form-control"
-        />
+          defaultValue={"default"}
+        >
+          <option value="default" disabled hidden>
+            Choose a category...
+          </option>
+          <option value="Utility">Utility</option>
+          <option value="Need">Need</option>
+          <option value="Want">Want</option>
+          <option value="Entertainment">Etertainment</option>
+          <option value="Rent">Rent</option>
+        </select>
         {
           //this code uses zod to create our error messages based on the schema that was defined above.
           errors.category && (

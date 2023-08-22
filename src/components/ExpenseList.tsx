@@ -29,7 +29,7 @@ const ExpenseList = () => {
           {Expense({
             description: "Groceries",
             amount: 150,
-            category: "Food",
+            category: "Need",
           })}
         </tbody>
       </table>
