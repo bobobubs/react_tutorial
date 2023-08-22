@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-//z.object expects an object and returns a schema with out validation rules for all of our form feels defined in it
 const schema = z.object({
   description: z
     .string()
@@ -18,9 +17,19 @@ const schema = z.object({
     .min(3, { message: "Description must be at least 3 characters" }),
 });
 
-//can also use the z.infer function to define the interface for FormData
 type FormData = z.infer<typeof schema>;
-const onSubmit = (data: FieldValues) => console.log(data);
+
+const expense = {
+  description: "",
+  amount: 0,
+  category: "",
+};
+const onSubmit = (data: FieldValues) => {
+  expense.description = data.description;
+  expense.amount = data.amount;
+  expense.category = data.category;
+  console.log(expense);
+};
 
 export const ExpenseForm = () => {
   const {
