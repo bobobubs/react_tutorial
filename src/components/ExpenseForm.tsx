@@ -1,9 +1,10 @@
 /** @format */
 
 import React, { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, FieldValues } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Expense from "./Expense";
 
 const schema = z.object({
   description: z
@@ -19,15 +20,13 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const expense = {
+const [expense, setExpense] = useState({
   description: "",
   amount: 0,
   category: "",
-};
+});
 const onSubmit = (data: FieldValues) => {
-  expense.description = data.description;
-  expense.amount = data.amount;
-  expense.category = data.category;
+  setExpense({ ...data });
   console.log(expense);
 };
 

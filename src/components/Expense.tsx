@@ -1,7 +1,12 @@
 /** @format */
 
-import React from "react";
+import React, { useState } from "react";
 
+const [expense, setExpense] = useState({
+  description: "",
+  amount: 0,
+  category: "",
+});
 interface Props {
   description: string;
   amount: number;
