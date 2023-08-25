@@ -4,19 +4,19 @@ import React, { useRef, useState } from "react";
 import { useForm, FieldValues } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Expense from "../Expense";
-import { categories } from "../../App";
+import Expense from "../../Expense";
+import categories from "./categories";
 
 const schema = z.object({
   description: z
     .string()
     .min(3, { message: "Description must be at least 3 characters" }), //the message key allows your to determine what you want to error message to appear as.
   amount: z
-    .number({ invalid_type_error: "Age is requried to be a number" }) //this will show if someone tries to enter the wrong type
-    .min(0),
-  category: z
-    .string()
-    .min(3, { message: "Description must be at least 3 characters" }),
+    .number({ invalid_type_error: "Amount is requried to be a number" }) //this will show if someone tries to enter the wrong type
+    .min(0.01),
+  category: z.enum(categories, {
+    errorMap: () => ({ message: "Category is required" }),
+  }),
 });
 
 type FormData = z.infer<typeof schema>;
