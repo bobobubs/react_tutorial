@@ -26,8 +26,10 @@ const [expense, setExpense] = useState({
   category: "",
 });
 const onSubmit = (data: FieldValues) => {
-  setExpense({ ...data });
-  console.log(expense);
+  e.preventDefault();
+  props.onFormSubmit(expense);
+  //setExpense({ data });
+  //console.log(expense);
 };
 
 export const ExpenseForm = () => {
