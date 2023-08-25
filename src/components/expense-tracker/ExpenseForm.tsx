@@ -4,7 +4,8 @@ import React, { useRef, useState } from "react";
 import { useForm, FieldValues } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Expense from "./Expense";
+import Expense from "../Expense";
+import { categories } from "../../App";
 
 const schema = z.object({
   description: z
@@ -19,17 +20,8 @@ const schema = z.object({
 });
 
 type FormData = z.infer<typeof schema>;
-
-const [expense, setExpense] = useState({
-  description: "",
-  amount: 0,
-  category: "",
-});
 const onSubmit = (data: FieldValues) => {
-  e.preventDefault();
-  props.onFormSubmit(expense);
-  //setExpense({ data });
-  //console.log(expense);
+  console.log(data);
 };
 
 export const ExpenseForm = () => {
@@ -87,11 +79,11 @@ export const ExpenseForm = () => {
           <option value="default" disabled hidden>
             Choose a category...
           </option>
-          <option value="Utility">Utility</option>
-          <option value="Need">Need</option>
-          <option value="Want">Want</option>
-          <option value="Entertainment">Etertainment</option>
-          <option value="Rent">Rent</option>
+          {categories.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
         </select>
         {
           //this code uses zod to create our error messages based on the schema that was defined above.
@@ -99,6 +91,8 @@ export const ExpenseForm = () => {
             <p className="text-danger">{errors.category.message}</p>
           )
         }
+      </div>
+      <div className="mb-3">
         <button className="btn btn-primary" type="submit">
           Submit
         </button>
