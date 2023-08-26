@@ -1,51 +1,27 @@
 /** @format */
 
-import { useState } from "react";
-import Form from "./components/Form";
+import { useState, useRef, useEffect } from "react";
 import "./index.css";
-import ExpenseList from "./components/expense-tracker/components/ExpenseList";
-import { ExpenseForm } from "./components/expense-tracker/components/ExpenseForm";
-import ExpenseFilter from "./components/expense-tracker/components/expenseFilter";
-import categories from "./components/expense-tracker/components/categories";
-
 function App() {
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [expenses, setExpenses] = useState([
-    { id: 1, description: "abc", amount: 10, category: "Utilities" },
-    { id: 2, description: "bbb", amount: 10, category: "Utilities" },
-    { id: 3, description: "ccc", amount: 10, category: "Utilities" },
-    { id: 4, description: "dddd", amount: 10, category: "Utilities" },
-    { id: 5, description: "efa", amount: 10, category: "Utilities" },
-  ]);
+  const ref = useRef<HTMLInputElement>(null);
 
-  //make a local variable of the filtered expenses
-  const visibleExpenses = selectedCategory
-    ? expenses.filter((e) => e.category === selectedCategory)
-    : expenses;
+  //function should really be called afterRender
+  useEffect(() => {
+    //changes the focus of the DOM element to be the ref if ref.current is defined
+    //has a "side effect" ie no longer a pure component.
+    //can make it a pure component by using a ref hook.
+    if (ref.current) ref.current.focus();
+  });
+
+  //effect that changes the title of the document.
+  useEffect(() => {
+    document.title = "My App";
+  });
 
   return (
-    <>
-      <div className="mb-5">
-        <ExpenseForm
-          onSubmit={(expense) =>
-            setExpenses([...expenses, { ...expense, id: expenses.length + 1 }])
-          }
-        />
-      </div>
-      <div className="mb-3">
-        <ExpenseFilter
-          onSelectCategory={(category) => setSelectedCategory(category)}
-        />
-      </div>
-      <div>
-        <ExpenseList
-          expenses={visibleExpenses}
-          onDelete={(id) =>
-            setExpenses(visibleExpenses.filter((e) => e.id !== id))
-          }
-        />
-      </div>
-    </>
+    <div>
+      <input ref={ref} type="text" className="form-control" />
+    </div>
   );
 }
 
