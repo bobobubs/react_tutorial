@@ -1,31 +1,37 @@
 /** @format */
 
 import { useState, useRef, useEffect } from "react";
+//axios is a library to use http requests
+import axios from "axios";
 import "./index.css";
 import ProductList from "./components/ProductList";
+
+//interface that will be used to make our code typesafe when we are doing things with the response in the promises then() method
+interface User {
+  id: number;
+  name: string;
+}
+
 function App() {
-  //Optionally you can have useEffect() do "Clean up" by having it return a function that undoes some of the stuff done in the effect. the example below is of connecting and reconnecting to a server
-
-  const connect = () => console.log("Connectiong");
-  const disconnect = () => console.log("Disconnecting");
+  const [users, setUsers] = useState<User[]>([]);
   useEffect(() => {
-    connect();
-    // do some other things
-    return () => disconnect();
-  });
+    //the get functions gets information from an endpoint
+    //axios.get() returns a promise. the server may take a long time
+    //to get the information taht we requested.
+    //Promise: An object that holds the eventual result or failure of an asynchronus operation. (asynchronus = long runnning)
+    axios
+      .get<User[]>("https://jsonplaceholder.typicode.com/users")
+      .then((res) => setUsers(res.data));
+    //then is a method of any type of reponse and specifies what to do after the promise is resolved.
+  }, []);
 
+  //down here we render the users recieved from the request
   return (
-    <div>
-      <select
-        className="form-select"
-        onChange={(event) => setCategory(event.target.value)}
-      >
-        <option value=""></option>
-        <option value="Clothing">Clothing</option>
-        <option value="Household">Household</option>
-      </select>
-      <ProductList category={category} />
-    </div>
+    <ul>
+      {users.map((user) => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
   );
 }
 
