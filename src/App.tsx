@@ -14,24 +14,26 @@ interface User {
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
+
+  //creating a state variable to store state of error status
+  const [error, setError] = useState("");
   useEffect(() => {
-    //the get functions gets information from an endpoint
-    //axios.get() returns a promise. the server may take a long time
-    //to get the information taht we requested.
-    //Promise: An object that holds the eventual result or failure of an asynchronus operation. (asynchronus = long runnning)
     axios
-      .get<User[]>("https://jsonplaceholder.typicode.com/users")
-      .then((res) => setUsers(res.data));
-    //then is a method of any type of reponse and specifies what to do after the promise is resolved.
+      .get<User[]>("https://jsonplaceholder.typicode.com/x")
+      .then((res) => setUsers(res.data))
+      //catch method is used to catch errors
+      .catch((err) => setError(err.message));
   }, []);
 
-  //down here we render the users recieved from the request
   return (
-    <ul>
-      {users.map((user) => (
-        <li key={user.id}>{user.name}</li>
-      ))}
-    </ul>
+    <>
+      {error && <p className="text-danger">{error}</p>}
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    </>
   );
 }
 
