@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 //axios is a library to use http requests
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import "./index.css";
 import ProductList from "./components/ProductList";
 
@@ -18,11 +18,25 @@ function App() {
   //creating a state variable to store state of error status
   const [error, setError] = useState("");
   useEffect(() => {
-    axios
-      .get<User[]>("https://jsonplaceholder.typicode.com/x")
-      .then((res) => setUsers(res.data))
-      //catch method is used to catch errors
-      .catch((err) => setError(err.message));
+    //instead of using axious.get().then().catch() we can use
+    //async and await
+
+    //NOTE: This is kind of ugly because of the way that the react useEffect() hook works
+    const fetchUsers = async () => {
+      //add try catch block in the case of an error
+      try {
+        const res = await axios.get<User[]>(
+          "https://jsonplaceholder.typicode.com/users"
+        );
+        setUsers(res.data);
+      } catch (err) {
+        //setting the type of error below to make the ts compiler happy
+        setError((err as AxiosError).message);
+      }
+    };
+
+    //call the function we just created
+    fetchUsers();
   }, []);
 
   return (
