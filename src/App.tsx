@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 //axios is a library to use http requests
-import axios, { AxiosError } from "axios";
+import axios, { CanceledError } from "axios";
 import "./index.css";
 import ProductList from "./components/ProductList";
 
@@ -18,25 +18,19 @@ function App() {
   //creating a state variable to store state of error status
   const [error, setError] = useState("");
   useEffect(() => {
-    //instead of using axious.get().then().catch() we can use
-    //async and await
+    //AbortController() is a built in function to modern browsers that allows us to cancel any fetch request or DOM update or anything else like that.
+    const controller = new AbortController();
 
-    //NOTE: This is kind of ugly because of the way that the react useEffect() hook works
-    const fetchUsers = async () => {
-      //add try catch block in the case of an error
-      try {
-        const res = await axios.get<User[]>(
-          "https://jsonplaceholder.typicode.com/users"
-        );
-        setUsers(res.data);
-      } catch (err) {
-        //setting the type of error below to make the ts compiler happy
-        setError((err as AxiosError).message);
-      }
-    };
-
-    //call the function we just created
-    fetchUsers();
+    axios
+      .get<User[]>("https://jsonplaceholder.typicode.com/users", {signal: controller.signal}) // set the signal property to use the controller as a signal.
+      .then((res) => setUsers(res.data))
+      //update the catch logic to disregard 
+      .catch((err) => {if (err instanceof CanceledError) return;
+      setError(err.message);
+      });
+    
+    //use controller to cleanup the request
+    return () => controller.abort();
   }, []);
 
   return (
