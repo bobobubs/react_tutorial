@@ -6,7 +6,7 @@ import axios, { CanceledError } from "axios";
 import "./index.css";
 import ProductList from "./components/ProductList";
 
-//interface that will be used to make our code typesafe when we are doing things with the response in the promises then() method
+
 interface User {
   id: number;
   name: string;
@@ -14,28 +14,29 @@ interface User {
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
-
-  //creating a state variable to store state of error status
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    //AbortController() is a built in function to modern browsers that allows us to cancel any fetch request or DOM update or anything else like that.
     const controller = new AbortController();
+    setIsLoading(true);
 
     axios
-      .get<User[]>("https://jsonplaceholder.typicode.com/users", {signal: controller.signal}) // set the signal property to use the controller as a signal.
-      .then((res) => setUsers(res.data))
-      //update the catch logic to disregard 
+      .get<User[]>("https://jsonplaceholder.typicode.com/users", {signal: controller.signal}) 
+      .then((res) => {setUsers(res.data);
+          setIsLoading(false); //change state after data is resolved
+      })
       .catch((err) => {if (err instanceof CanceledError) return;
       setError(err.message);
+      setIsLoading(false);
       });
     
-    //use controller to cleanup the request
     return () => controller.abort();
   }, []);
 
   return (
     <>
       {error && <p className="text-danger">{error}</p>}
+      {isLoading && <div className="spinner-border"></div>}
       <ul>
         {users.map((user) => (
           <li key={user.id}>{user.name}</li>
