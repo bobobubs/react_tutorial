@@ -33,14 +33,12 @@ function App() {
   }, []);
 
   const deleteUser = (user: User) => {
-    //use this to fix UI if there is an error.
+
     const originalUsers = [...users];
-    //update the users list on delete using filter method
-    //This will update the ui. 
+
     setUsers(users.filter(u => u.id !== user.id));
 
-    //delete the user on the server
-    axios.delete("https://jsonplaceholder.typicode.com/users/" + user.id).catch((error) => {
+    axios.delete("https://jsonplaceholder.typicode.com/ users/" + user.id).catch((error) => {
       setError(error.message);
       setUsers(originalUsers);
     });
