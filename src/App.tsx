@@ -1,8 +1,8 @@
 /** @format */
 
 import { useState, useRef, useEffect } from "react";
-import axios, { CanceledError } from "axios";
 import "./index.css";
+import apiClient, {CanceledError} from "./services/api-client";
 import ProductList from "./components/ProductList";
 
 
@@ -19,8 +19,9 @@ function App() {
     const controller = new AbortController();
     setIsLoading(true);
 
-    axios
-      .get<User[]>("https://jsonplaceholder.typicode.com/users", {signal: controller.signal}) 
+    //Now we are calling the apicClient that uses axios
+    apiClient
+      .get<User[]>("/users", {signal: controller.signal}) 
       .then((res) => {setUsers(res.data);
           setIsLoading(false); 
       })
@@ -38,7 +39,8 @@ function App() {
 
     setUsers(users.filter(u => u.id !== user.id));
 
-    axios.delete("https://jsonplaceholder.typicode.com/users/" + user.id).catch((error) => {
+    //Now we are calling the apicClient that uses axios
+    apiClient.delete("/users/" + user.id).catch((error) => {
       setError(error.message);
       setUsers(originalUsers);
     });
@@ -46,14 +48,11 @@ function App() {
 
   const addUser = () => {
     const originalUsers = [...users];
-    //optimistic paradigm so update the UI 
     const newUser = {id: 0,  name: "Mason"};
     setUsers([newUser, ...users]);
 
-    //then update the data on the server.
-    //use the axios.post() method to post new information to the server
-    axios.post("https://jsonplaceholder.typicode.com/users/", newUser).then
-    //on this line destructuring the response and using an alias to make the code easier to read.
+    //Now we are calling the apicClient that uses axios
+    apiClient.post("/users/", newUser).then
     (({data: savedUser}) => setUsers([savedUser, ...users])).catch((error) => { 
       setError(error.message);
       setUsers(originalUsers);
@@ -65,7 +64,8 @@ function App() {
     const updatedUser = { ...user, name: user.name + '!'};
     setUsers(users.map(u => u.id === user.id ? updatedUser : u));
 
-    axios.patch("https://jsonplaceholder.typicode.com/users/" + user.id, updatedUser).catch((error) => { 
+    //Now we are calling the apicClient that uses axios
+    apiClient.patch("h/users/" + user.id, updatedUser).catch((error) => { 
       setError(error.message);
       setUsers(originalUsers);
     })
